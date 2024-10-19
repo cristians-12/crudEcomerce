@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class UserServices
 {
@@ -27,5 +30,25 @@ class UserServices
     public function getUsers()
     {
         return User::all();
+    }
+
+    public function login($data)
+    {
+        $credentials = $data->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            session()->regenerate();
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            $cookie = cookie('cookie_token', $token, 60 * 24, null, null, true, false, false, 'None');
+            // return response()->json(['message' => 'Login successful'], 200);
+            return response(["token" => $token, "user"=> $user], Response::HTTP_OK)->withoutCookie($cookie);
+        }
+
+        // Autenticación fallida
+        return response()->json(['error' => 'Invalid credentials'], 401);
     }
 }

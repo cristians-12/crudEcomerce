@@ -24,4 +24,8 @@ class UserController extends Controller
     {
         return $this->userService->createUser($request);
     }
+
+    public function login(Request $request){
+        return $this->userService->login($request);
+    }
 }
