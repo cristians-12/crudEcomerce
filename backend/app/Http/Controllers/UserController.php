@@ -22,14 +22,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user = $this->userService->createUser($validatedData);
-
-        return response()->json(['user' => $user, 'message' => 'Success'], 201);
+        return $this->userService->createUser($request);
     }
 }
