@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserController
 {
     protected $userService;
 
@@ -25,7 +25,8 @@ class UserController extends Controller
         return $this->userService->createUser($request);
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         return $this->userService->login($request);
     }
 }
